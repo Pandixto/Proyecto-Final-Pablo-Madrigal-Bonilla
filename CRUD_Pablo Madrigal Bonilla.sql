@@ -1,0 +1,100 @@
+
+-- TABLA CANCION
+CREATE TABLE CANCION (
+    ID NUMBER PRIMARY KEY,
+    NOMBRE VARCHAR2(100),
+    ARTISTA VARCHAR2(100),
+    ALBUM VARCHAR2(100),
+    PRECIO NUMBER
+);
+
+CREATE OR REPLACE PROCEDURE insertar_cancion(
+    p_id IN NUMBER,
+    p_nombre IN VARCHAR2,
+    p_artista IN VARCHAR2,
+    p_album IN VARCHAR2,
+    p_precio IN NUMBER
+) AS
+BEGIN
+    INSERT INTO CANCION VALUES (p_id, p_nombre, p_artista, p_album, p_precio);
+END;
+/
+
+CREATE OR REPLACE PROCEDURE actualizar_cancion(
+    p_id IN NUMBER,
+    p_nombre IN VARCHAR2,
+    p_artista IN VARCHAR2,
+    p_album IN VARCHAR2,
+    p_precio IN NUMBER
+) AS
+BEGIN
+    UPDATE CANCION SET
+        NOMBRE = p_nombre,
+        ARTISTA = p_artista,
+        ALBUM = p_album,
+        PRECIO = p_precio
+    WHERE ID = p_id;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE eliminar_cancion(p_id IN NUMBER) AS
+BEGIN
+    DELETE FROM CANCION WHERE ID = p_id;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE listar_canciones(p_result OUT SYS_REFCURSOR) AS
+BEGIN
+    OPEN p_result FOR SELECT * FROM CANCION;
+END;
+/
+
+-- TABLA USUARIO
+CREATE TABLE USUARIO (
+    ID NUMBER PRIMARY KEY,
+    NOMBRE VARCHAR2(100),
+    CORREO VARCHAR2(100),
+    CONTRASENA VARCHAR2(100),
+    EDAD NUMBER
+);
+
+CREATE OR REPLACE PROCEDURE insertar_usuario(
+    p_id IN NUMBER,
+    p_nombre IN VARCHAR2,
+    p_correo IN VARCHAR2,
+    p_contrasena IN VARCHAR2,
+    p_edad IN NUMBER
+) AS
+BEGIN
+    INSERT INTO USUARIO VALUES (p_id, p_nombre, p_correo, p_contrasena, p_edad);
+END;
+/
+
+CREATE OR REPLACE PROCEDURE listar_usuarios(p_result OUT SYS_REFCURSOR) AS
+BEGIN
+    OPEN p_result FOR SELECT * FROM USUARIO;
+END;
+/
+
+-- TABLA LISTA_REPRODUCCION
+CREATE TABLE LISTA_REPRODUCCION (
+    ID NUMBER PRIMARY KEY,
+    NOMBRE VARCHAR2(100),
+    USUARIO_ID NUMBER REFERENCES USUARIO(ID)
+);
+
+CREATE OR REPLACE PROCEDURE insertar_lista(
+    p_id IN NUMBER,
+    p_nombre IN VARCHAR2,
+    p_usuario_id IN NUMBER
+) AS
+BEGIN
+    INSERT INTO LISTA_REPRODUCCION VALUES (p_id, p_nombre, p_usuario_id);
+END;
+/
+
+CREATE OR REPLACE PROCEDURE listar_listas(p_result OUT SYS_REFCURSOR) AS
+BEGIN
+    OPEN p_result FOR SELECT * FROM LISTA_REPRODUCCION;
+END;
+/
